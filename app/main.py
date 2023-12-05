@@ -13,12 +13,12 @@ app = FastAPI()
 
 
 @app.get("/")
-async def root():
+async def root() -> Response:
     return Response.DefaultOK(data={"message": "Hello World"})
 
 
 @app.post("/predict")
-async def predict(file: UploadFile):
+async def predict(file: UploadFile) -> Response:
     try:
         contents = file.file.read()
         with open(file.filename, 'wb') as f:
@@ -52,6 +52,15 @@ async def predict(file: UploadFile):
     int_to_label = {0: 'bika_ambon', 1: 'dadar_gulung', 2: 'donat', 3: 'kue_cubit', 4: 'kue_klepon',
                     5: 'kue_lapis', 6: 'kue_lumpur', 7: 'kue_risoles', 8: 'putu_ayu', 9: 'roti'}
 
-    result = np.argmax(predictions['predictions'][0])
+    pred_idx = np.argmax(predictions['predictions'][0])
+    result = int_to_label[pred_idx]
 
-    return Response.DefaultOK(data={"prediction": int_to_label[result]})
+    data = {
+        "name": result,
+        "rating": 5,
+        "price": 10000
+    }
+
+    return Response.DefaultOK(
+        data=data
+    )
