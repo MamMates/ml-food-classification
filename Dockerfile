@@ -1,15 +1,9 @@
-FROM python:3.10
+FROM tensorflow/serving:2.14.0
 
-WORKDIR /app
+ENV MODEL_NAME=food_clf
+ENV MODEL_BASE_PATH=/models
+ENV TF_CPP_VMODULE=http_server=1
 
-RUN apt-get update && apt-get install ffmpeg libsm6 libxext6 libgl1 -y
+COPY /model /models/${MODEL_NAME}/1/
 
-COPY requirements.txt requirements.txt
-
-RUN pip install -r requirements.txt
-
-EXPOSE 8080
-
-COPY . . 
-
-CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8080"]
+CMD tensorflow_model_server --rest_api_port=8501 --model_name=${MODEL_NAME} --model_base_path=/${MODEL_BASE_PATH}/${MODEL_NAME}
