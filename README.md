@@ -52,12 +52,12 @@ docker pull putuwaw/mammates-food-classification
 docker run -p 8501:8501 --name ml-clf putuwaw/mammates-food-classification
 ```
 
-- You can check that the model is already running by opening the browser and go to `http://localhost:8501/v1/models/food_clf`
+- You can check that the model is already running by opening the browser and go to http://localhost:8501/v1/models/food_clf
 
 - To do prediction, you can use the following command:
 
 ```bash
-curl -d @example.json -X POST http://localhost:8501/v1/models/food_clf:predict
+curl -s https://raw.githubusercontent.com/MamMates/ml-food-classification/main/example.json | curl -X POST -d @- http://localhost:8501/v1/models/food_clf:predict
 ```
 
 - You will get the following response:
@@ -97,7 +97,13 @@ docker build -t mammates-food-classification .
 docker run -p 8501:8501 --name ml-clf mammates-food-classification
 ```
 
-- You can check that the model is already running by opening browser and go to `http://localhost:8501/v1/models/food_clf`
+- You can check that the model is already running by opening browser and go to http://localhost:8501/v1/models/food_clf
+
+- To do prediction, you can use the following command:
+
+```bash
+curl -d @example.json -X POST http://localhost:8501/v1/models/food_clf:predict
+```
 
 - To stop the container:
 
